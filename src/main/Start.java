@@ -1,4 +1,4 @@
-package mouseHighlight;
+package main;
 
 import java.awt.Color;
 import java.util.Locale;
