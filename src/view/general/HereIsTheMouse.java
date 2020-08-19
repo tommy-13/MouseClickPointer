@@ -13,12 +13,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -26,6 +27,8 @@ import javax.swing.event.ChangeListener;
 
 import globals.GlobalConstants;
 import globals.GlobalFunctions;
+import language.Language;
+import language.LanguageSetting;
 import language.Messages;
 import safeLoad.Settings;
 import view.graphicalElements.DialogColor;
@@ -56,6 +59,7 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 	private JButton bStart;
 	private JButton bStandards;
 	private JCheckBox cbActivateAll;
+	private JComboBox<String> cbLanguage;
 	
 	private JCheckBox cbActivateCircles;
 	private JSpinnerInteger sRadiusCircle;
@@ -169,7 +173,7 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.NORTHEAST;
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.insets = new Insets(20, 20, 0, 20);
+		gbc.insets = new Insets(20, 20, 30, 20);
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		mainPanel.add(createFootPanel(), gbc);
@@ -417,7 +421,7 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.anchor = GridBagConstraints.LINE_END;
+		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.insets = new Insets(0, 100, generalInsets, generalInsets);
 		gbc.gridx = 1;
 		gbc.gridy = gbcRow;
@@ -429,8 +433,8 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 		cbActivateAll = new JCheckBox(Messages.getString("Label.ActivateAll"));
 		cbActivateAll.addActionListener(this);
 		cbActivateAll.setActionCommand(ActionCommand.cbActivateAll);
-		addToPanel(panel, cbActivateAll, 0, gbcRow++, new Insets(generalInsets,generalInsets,generalInsets,generalInsets));
-
+		addToPanel(panel, cbActivateAll, 0, gbcRow, new Insets(generalInsets,generalInsets,generalInsets,generalInsets));
+		
 		return panel;
 	}
 
@@ -447,12 +451,33 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(generalInsets, generalInsets, 30, generalInsets);
+		gbc.insets = new Insets(generalInsets, generalInsets, 0, generalInsets);
 		gbc.gridx = 0;
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.gridy = gbcRow++;
+		//gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.gridy = gbcRow;
 		bStart.setFont(font);
 		panel.add(bStart, gbc);
+		
+		JLabel emptyLabel = new JLabel("");
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(generalInsets, 100, 0, 100);
+		gbc.gridx = 1;
+		gbc.gridy = gbcRow;
+		panel.add(emptyLabel, gbc);
+		
+
+		cbLanguage = new JComboBox<String>(Language.getArray());
+		cbLanguage.setSelectedItem(LanguageSetting.getInstance().getCurrentLanguage().toString());
+		cbLanguage.addActionListener(this);
+		cbLanguage.setActionCommand(ActionCommand.cbLanguage);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.insets = new Insets(generalInsets, generalInsets, 0, generalInsets);
+		gbc.gridx = 2;
+		//gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.gridy = gbcRow++;
+		cbLanguage.setFont(font);
+		panel.add(cbLanguage, gbc);
 
 		return panel;
 	}
@@ -678,6 +703,25 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 			prefs.setLetterMiddleSelected(isSelected);
 			return;
 		}
+		if (event.getActionCommand().equals(ActionCommand.cbLanguage)) {
+			String strSelectedLan = (String) cbLanguage.getSelectedItem();
+			Language selectedLan  = Language.parseLanguage(strSelectedLan);
+			
+			LanguageSetting lanSet = LanguageSetting.getInstance();
+			Language startLan = lanSet.getLanguageAtStart();
+			Language curLan   = lanSet.getCurrentLanguage();
+						
+			if (selectedLan != curLan) {
+				// change the current language
+				lanSet.setLanguage(selectedLan);
+				
+				if (selectedLan != startLan) {
+					// show info box
+					JOptionPane.showMessageDialog(this, Messages.getString("LanguageChanged.InfoText"));
+				}
+			}
+			return;
+		}
 		/*
 		if (event.getActionCommand().equals(ActionCommand.cbLetterWheel)) {
 			Preferences prefs = Preferences.getInstance();
@@ -689,6 +733,8 @@ public class HereIsTheMouse extends JFrame implements ActionListener, ChangeList
 		*/
 		
 	}
+	
+	
 
 	@Override
 	public void stateChanged(ChangeEvent event) {

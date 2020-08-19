@@ -27,4 +27,8 @@ public class GlobalConstants {
 	// colors
 	public static final Color BACKGROUND   			= Color.LIGHT_GRAY;
 	public static final Color DEFAULT_IMAGE_COLOR 	= new Color(255, 128, 0);
+	
+    // languages
+	public static final int ID_ENGLISH = 0;
+	public static final int ID_GERMAN  = 1;
 }

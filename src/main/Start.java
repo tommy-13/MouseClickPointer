@@ -8,7 +8,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import globals.OSInformation;
-import language.Language;
+import language.LanguageSetting;
 import language.Messages;
 import safeLoad.Settings;
 import view.general.HereIsTheMouse;
@@ -18,8 +18,14 @@ public class Start {
 	public static void main(String[] args) {
 
 		/* set language */
-		Messages.setLanguage(Language.GERMAN);
-		Locale.setDefault(Locale.GERMAN);
+		Messages.setLanguage(LanguageSetting.getInstance().getLanguageAtStart());
+		switch(LanguageSetting.getInstance().getLanguageAtStart()) {
+		case ENGLISH: default: Locale.setDefault(Locale.ENGLISH); break;
+		case GERMAN: Locale.setDefault(Locale.GERMAN); break;	
+		}
+
+		//Messages.setLanguage(Language.GERMAN);
+		//Locale.setDefault(Locale.GERMAN);
 
 		
 		// set look and and feel

@@ -3,6 +3,8 @@ package language;
 import java.util.ArrayList;
 import java.util.List;
 
+import globals.GlobalConstants;
+
 public enum Language {
 	
 	GERMAN,
@@ -14,6 +16,19 @@ public enum Language {
 		case GERMAN: return Messages.getString("Language.German");
 		case ENGLISH:
 		default: return Messages.getString("Language.English");
+		}
+	}
+	
+	public int getFixedId() {
+		switch(this) {
+		case GERMAN:  return GlobalConstants.ID_GERMAN;
+		case ENGLISH: default: return GlobalConstants.ID_ENGLISH;
+		}
+	}
+	public static Language getLanguageFromId(int id) {
+		switch(id) {
+		case GlobalConstants.ID_GERMAN: return GERMAN;
+		case GlobalConstants.ID_ENGLISH: default: return ENGLISH;
 		}
 	}
 	

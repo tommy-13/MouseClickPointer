@@ -6,6 +6,7 @@ public class ActionCommand {
 	public static final String bStop         = "buttonStop";
 	public static final String bStandards    = "buttonStandards";
 	public static final String cbActivateAll = "activateAll";
+	public static final String cbLanguage    = "language";
 
 
 	public static final String cbActivateCircles       = "activateCircles";
