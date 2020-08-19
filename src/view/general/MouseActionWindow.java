@@ -40,9 +40,10 @@ public class MouseActionWindow extends JWindow implements SettingsObserver {
 	
 	//Polygon polygonDown;
 	//Polygon polygonUp;
-	Polygon polygonFilledDown;
-	Polygon polygonFilledUp;
+	private Polygon polygonFilledDown;
+	private Polygon polygonFilledUp;
 	
+	// minimal x and y value regarding all connected screens
 	
 	
 	/**
